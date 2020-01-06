@@ -1,15 +1,16 @@
-FROM kvm:maven-3.5.2-jdk-8  #tag we gave to DockerfileKVM
+# tag we gave to DockerfileKVM
+FROM kvm:maven-3.5.2-jdk-8 
 # debian based
  
 ENV UDIDS=""
- 
+
 #=====================
 # Install android sdk
 #=====================
 ARG ANDROID_SDK_VERSION=4333796
 ENV ANDROID_SDK_VERSION=$ANDROID_SDK_VERSION
 ARG ANDROID_PLATFORM="android-25"
-ARG BUILD_TOOLS="26.0.0"
+ARG BUILD_TOOLS="29.0.2"
 ENV ANDROID_PLATFORM=$ANDROID_PLATFORM
 ENV BUILD_TOOLS=$BUILD_TOOLS
  
