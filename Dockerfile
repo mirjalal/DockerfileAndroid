@@ -1,5 +1,5 @@
 # tag we gave to DockerfileKVM
-FROM kvm:maven-3.5.2-jdk-8 
+FROM dockerfile_kvm
 # debian based
  
 ENV UDIDS=""
