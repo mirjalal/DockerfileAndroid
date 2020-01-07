@@ -31,7 +31,7 @@ RUN wget -q https://dl.google.com/android/repository/platform-tools-latest-linux
 RUN unzip platform-tools-latest-linux.zip -d /opt/adk
 RUN rm platform-tools-latest-linux.zip
 RUN yes | /opt/adk/tools/bin/sdkmanager --licenses
-RUN yes | /opt/adk/tools/bin/sdkmanager "emulator" "build-tools;${BUILD_TOOLS}" "platforms;android-29;${ANDROID_PLATFORM}" "system-images;android-29;${ANDROID_PLATFORM};google_apis;armeabi-v7a"
+RUN yes | /opt/adk/tools/bin/sdkmanager "emulator" "build-tools;${BUILD_TOOLS}" "platforms;${ANDROID_PLATFORM}" "system-images;${ANDROID_PLATFORM};google_apis;armeabi-v7a"
 RUN echo n | /opt/adk/tools/bin/avdmanager create avd -n "Android" -k "system-images;${ANDROID_PLATFORM};google_apis;armeabi-v7a"
 RUN mkdir -p ${HOME}/.android/ \
     && ln -s /root/.android/avd ${HOME}/.android/avd \
