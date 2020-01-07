@@ -56,5 +56,5 @@ RUN wget -q https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}-linux-x
     && npm install -g appium@${APPIUM_VERSION} --allow-root --unsafe-perm=true \
     && ln -s /opt/node-${NODE_VERSION}-linux-x64/bin/appium /usr/bin/
  
-EXPOSE 5037
+EXPOSE 4723 2251 5555 5037
 CMD ["docker-entrypoint.sh"]
