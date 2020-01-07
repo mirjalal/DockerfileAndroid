@@ -31,4 +31,4 @@ while [ -z $udid ]; do
 done
 
 # http://appium.io/docs/en/writing-running-appium/server-args/
-exec appium -p 4723 -bp 2251 --default-capabilities '{"udid":"'${udid}'"}' &
+exec appium -p 4723 -bp 5037 --default-capabilities '{"udid":"'${udid}'"}' &
