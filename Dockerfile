@@ -2,7 +2,7 @@ FROM maven:3.5.2-jdk-8
 #debian based
  
 RUN apt-get update -qqy \
-    && apt-get -qqy install libglu1 qemu-kvm libvirt-dev virtinst bridge-utils msr-tools kmod \
+    && apt-get -qqy install libglu1 qemu-kvm libvirt-dev build-essential virtinst bridge-utils msr-tools kmod \
     && wget -q http://security.ubuntu.com/ubuntu/pool/main/c/cpu-checker/cpu-checker_0.7-0ubuntu7_amd64.deb \
     && dpkg -i cpu-checker_0.7-0ubuntu7_amd64.deb
  
@@ -22,14 +22,18 @@ ENV BUILD_TOOLS=$BUILD_TOOLS
 RUN mkdir -p /opt/adk \
     && wget -q https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_SDK_VERSION}.zip \
     && unzip sdk-tools-linux-${ANDROID_SDK_VERSION}.zip -d /opt/adk \
-    && rm sdk-tools-linux-${ANDROID_SDK_VERSION}.zip \
-    && wget -q https://dl.google.com/android/repository/platform-tools-latest-linux.zip \
-    && unzip platform-tools-latest-linux.zip -d /opt/adk \
-    && rm platform-tools-latest-linux.zip \
-    && yes | /opt/adk/tools/bin/sdkmanager --licenses \
-    && /opt/adk/tools/bin/sdkmanager "emulator" "build-tools;${BUILD_TOOLS}" "platforms;${ANDROID_PLATFORM}" "system-images;${ANDROID_PLATFORM};google_apis;armeabi-v7a" \
-    && echo no | /opt/adk/tools/bin/avdmanager create avd -n "Android" -k "system-images;${ANDROID_PLATFORM};google_apis;armeabi-v7a" \
-    && mkdir -p ${HOME}/.android/ \
+    && rm sdk-tools-linux-${ANDROID_SDK_VERSION}.zip
+
+ADD pkg.txt /sdk
+RUN mkdir -p /root/.android && touch /root/.android/repositories.cfg
+
+RUN wget -q https://dl.google.com/android/repository/platform-tools-latest-linux.zip
+RUN unzip platform-tools-latest-linux.zip -d /opt/adk
+RUN rm platform-tools-latest-linux.zip
+RUN yes | /opt/adk/tools/bin/sdkmanager --licenses
+RUN yes | /opt/adk/tools/bin/sdkmanager "emulator" "build-tools;${BUILD_TOOLS}" "platforms;${ANDROID_PLATFORM}" "system-images;${ANDROID_PLATFORM};google_apis;armeabi-v7a"
+RUN echo n | /opt/adk/tools/bin/avdmanager create avd -n "Android" -k "system-images;${ANDROID_PLATFORM};google_apis;armeabi-v7a"
+RUN mkdir -p ${HOME}/.android/ \
     && ln -s /root/.android/avd ${HOME}/.android/avd \
     && ln -s /opt/adk/tools/emulator /usr/bin \
     && ln -s /opt/adk/platform-tools/adb /usr/bin
@@ -52,5 +56,5 @@ RUN wget -q https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}-linux-x
     && npm install -g appium@${APPIUM_VERSION} --allow-root --unsafe-perm=true \
     && ln -s /opt/node-${NODE_VERSION}-linux-x64/bin/appium /usr/bin/
  
-EXPOSE [4723,2251,5555]
+EXPOSE 5037
 CMD ["docker-entrypoint.sh"]
